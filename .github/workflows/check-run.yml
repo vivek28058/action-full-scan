@@ -19,10 +19,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Install Dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y nginx
+    - run: sudo apt-get update && sudo apt-get install -y nginx && sudo systemctl start nginx
 
     - name: ZAP Scan
       uses: ./
@@ -30,12 +27,3 @@ jobs:
       with:
         target: 'http://localhost'
         allow_issue_writing: false
-        output_format: html
-        output_path: './zap-report.html'
-
-    - name: Upload Report
-      uses: actions/upload-artifact@v3
-      with:
-        name: ZAP-Report
-        path: ./zap-report.html
-
