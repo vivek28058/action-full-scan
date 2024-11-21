@@ -27,3 +27,9 @@ jobs:
       with:
         target: 'http://localhost'
         allow_issue_writing: false
+        
+    - name: Upload Report
+      uses: actions/upload-artifact@v3
+      with:
+        name: ZAP-Report
+        path: ./zap-report.html
