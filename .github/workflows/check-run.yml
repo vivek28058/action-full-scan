@@ -19,31 +19,11 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Verify Docker
-      run: |
-        docker --version
-        sudo systemctl status docker || sudo systemctl start docker
+    - run: sudo apt-get update && sudo apt-get install -y nginx && sudo systemctl start nginx
 
-    - name: Start Local Server
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y nginx
-        echo "Hello, World!" > /var/www/html/index.html
-        sudo systemctl restart nginx
-
-    - name: Test Target Connectivity
-      run: curl -I http://localhost
-
-    - name: Run ZAP Scan
-      run: |
-        docker run --rm -v $(pwd):/zap/wrk:rw \
-        owasp/zap2docker-stable zap-full-scan.py \
-        -t http://localhost \
-        -r zap-report.html
-
-    - name: Upload ZAP Report
-      uses: actions/upload-artifact@v3
+    - name: ZAP Scan
+      uses: ./
+      id: action-full-scan
       with:
-        name: ZAP-Report
-        path: ./zap-report.html
-        if-no-files-found: warn
+        target: 'http://localhost'
+        allow_issue_writing: false
