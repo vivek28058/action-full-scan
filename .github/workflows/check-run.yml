@@ -25,5 +25,5 @@ jobs:
       uses: ./
       id: action-full-scan
       with:
-        target: 'http://localhost'
+        target: 'http://www.itsecgames.com/'
         allow_issue_writing: false
